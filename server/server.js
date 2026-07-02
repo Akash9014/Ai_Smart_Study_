@@ -1,14 +1,13 @@
-import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import connectDB from "./config/db.js";
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./config/db");
 
-import sessionRoutes from "./routes/sessionRoutes.js";
-import authRoutes from "./routes/auth.js";
-import taskRoutes from "./routes/task.js";
-import revisionRoutes from "./routes/revisionRoutes.js";
+const sessionRoutes = require("./routes/sessionRoutes");
+const authRoutes = require("./routes/auth");
+const taskRoutes = require("./routes/task");
+const revisionRoutes = require("./routes/revisionRoutes");
 
-dotenv.config();
 connectDB();
 
 const app = express();

@@ -115,7 +115,7 @@ function Sidebar() {
         display: "flex",
         borderRight: "1px solid rgba(0,0,0,0.1)",
         flexDirection: "column",
-        borderRight: "1px solid rgba(0,0,0,0.1)",
+
       }}
     >
       {/* Logo */}
