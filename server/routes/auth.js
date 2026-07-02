@@ -1,111 +1,64 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const User = require("../models/user");
-const router = express.Router();
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-// REGISTER
-router.post("/register", async (req, res) => {
+function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  try {
+  const navigate = useNavigate();
 
-    const { name, email, password } = req.body;
+  const API_URL = "https://ai-smart-study-server.onrender.com/api/auth/register";
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(API_URL, {
+        name,
+        email,
+        password,
+      });
+
+      alert("Registered successfully");
+      navigate("/login");
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
     }
+  };
 
-    const normalizedEmail = email.toLowerCase();
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Register</h2>
 
-    let user = await User.findOne({ email: normalizedEmail });
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
 
-    if (user) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
 
-    user = new User({
-      name,
-      email: normalizedEmail,
-      password: hashedPassword
-    });
+      <button type="submit">Register</button>
+    </form>
+  );
+}
 
-    await user.save();
-
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-  
-    res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
-      }
-    });
-
-  } catch (err) {
-
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-
-  }
-
-});
-
-
-// LOGIN
-router.post("/login", async (req, res) => {
-
-  try {
-
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const normalizedEmail = email.toLowerCase();
-
-    const user = await User.findOne({ email: normalizedEmail });
-
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-
-    res.json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
-      }
-    });
-
-  } catch (err) {
-
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-
-  }
-
-});
-
-module.exports = router;
+export default Register;
