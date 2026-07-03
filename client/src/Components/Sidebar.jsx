@@ -2,6 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL || "https://ai-smart-study-server.onrender.com";
+
 function Sidebar() {
   const [pendingCount, setPendingCount] = useState(0);
   const [revisionCount, setRevisionCount] = useState(0);
@@ -12,7 +14,7 @@ function Sidebar() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/tasks",
+        `${API_URL}/api/tasks`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -33,7 +35,7 @@ function Sidebar() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/revisions/today",
+        `${API_URL}/api/revisions/today`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

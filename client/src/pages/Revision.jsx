@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL || "https://ai-smart-study-server.onrender.com";
+
 function Revision() {
 
   const [topic, setTopic] = useState("");
@@ -14,7 +16,7 @@ function Revision() {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/revisions",
+        `${API_URL}/api/revisions`,
         {
           subject,
           topic
@@ -44,7 +46,7 @@ function Revision() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/revisions",
+        `${API_URL}/api/revisions`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -116,7 +118,7 @@ function Revision() {
           const token = localStorage.getItem("token");
 
           await axios.put(
-            `http://localhost:5000/api/revisions/revise/${rev._id}`,
+            `${API_URL}/api/revisions/revise/${rev._id}`,
             {},
             {
               headers: {

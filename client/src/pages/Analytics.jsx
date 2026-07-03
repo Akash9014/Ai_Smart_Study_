@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 import { Bar, Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
+const API_URL = process.env.REACT_APP_API_URL || "https://ai-smart-study-server.onrender.com";
 
 function Analytics() {
 
@@ -18,7 +20,7 @@ function Analytics() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/sessions",
+        `${API_URL}/api/sessions`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +42,7 @@ function Analytics() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/tasks",
+        `${API_URL}/api/tasks`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +64,7 @@ function Analytics() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/revisions/today",
+        `${API_URL}/api/revisions/today`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -10,7 +10,9 @@ import { Routes, Route } from "react-router-dom";
 import Chart from "chart.js/auto";
 import API from "../Services/api";
 import axios from "axios";
+
 import StudyPlanner from "./StudyPlanner";
+const API_URL = process.env.REACT_APP_API_URL || "https://ai-smart-study-server.onrender.com";
 
 // ---------------- CARD ----------------
 const Card = ({ children }) => (
@@ -78,7 +80,7 @@ function HomeContent({ user, tasks }) {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:5000/api/revisions/today",
+        `${API_URL}/api/revisions/today`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -95,7 +97,7 @@ function HomeContent({ user, tasks }) {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        `http://localhost:5000/api/revisions/revise/${id}`,
+        `${API_URL}/api/revisions/revise/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
